@@ -1,14 +1,27 @@
-- name: Deploy to Tomcat
-  hosts: web
+- hosts: localhost
   become: yes
+  gather_facts: no
 
   tasks:
-    - name: Copy WAR file to Tomcat
-      copy:
-        src: "/var/snap/jenkins/5004/workspace/Ansible/target/Ansible.war"
-        dest: "/opt/tomcat/webapps/Ansible.war"
 
-    - name: Restart Tomcat
-      shell: |
-        /opt/tomcat/bin/shutdown.sh || true
-        /opt/tomcat/bin/startup.sh
+    - name: Stop Tomcat
+      shell: /opt/tomcat/bin/shutdown.sh
+
+    - name: Remove old WAR deployment
+      file:
+        path: /opt/tomcat/webapps/Ansible.war
+        state: absent
+
+    - name: Remove old expanded app
+      file:
+        path: /opt/tomcat/webapps/Ansible
+        state: absent
+
+    - name: Copy WAR file
+      copy:
+        src: /home/aditya/Ansible/target/Ansible.war
+        dest: /opt/tomcat/webapps/Ansible.war
+        remote_src: yes
+
+    - name: Start Tomcat
+      shell: /opt/tomcat/bin/startup.sh
