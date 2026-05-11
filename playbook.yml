@@ -19,7 +19,7 @@
 
     - name: Copy WAR file
       copy:
-        src: /var/snap/jenkins/5022/workspace/ansible/target/maven-webapp.war
+        src: /var/snap/jenkins/5023/workspace/testansible/target/Ansible.war
         dest: /opt/tomcat/webapps/Ansible.war
         remote_src: yes
 
